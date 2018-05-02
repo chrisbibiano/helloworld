@@ -12,22 +12,19 @@ SoftwareSerial mySerial(8,9); //RX,TX
 Adafruit_SSD1306 display(-1);
 
 char inChar;
-String OLed_String;
 
 #if (SSD1306_LCDHEIGHT != 64)
-#error("Height incorrect, please fix Adafruit_SSD1306.h!");
+    #error("Height incorrect, please fix Adafruit_SSD1306.h!");
 #endif
 
-
 void setup() {
-
   // initialize and clear display
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
   display.display();
   delay(2000);
   display.clearDisplay();
   display.display();
-  display.setTextSize(2);
+  display.setTextSize(3);
   display.setTextColor(WHITE);
   
   // Open serial communications and wait for port to open:
@@ -35,24 +32,19 @@ void setup() {
 
 }
 
-
 void loop() {
-
  if (mySerial.available()){
     inChar=mySerial.read();
     mySerial.print(inChar);
     if (inChar!='\r'){
-      OLed_String+=inChar;
-      display.setCursor(0, 0);
-      display.print(OLed_String);
+      display.print(inChar);
     }
     else{
       display.clearDisplay();
-      OLed_String="";
+      display.setCursor(0, 0);
     }
     display.display();
   }
-
 }
 
 
