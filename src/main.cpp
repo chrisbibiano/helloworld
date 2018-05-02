@@ -1,6 +1,10 @@
+#include <Arduino.h>
 #include <Wire.h>
 #include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(8,9); //RX,TX
 
 // OLED display TWI address
 #define OLED_ADDR   0x3C
@@ -14,43 +18,39 @@ String OLed_String;
 #error("Height incorrect, please fix Adafruit_SSD1306.h!");
 #endif
 
-void testscrolltext(void);
-
 
 void setup() {
 
   // initialize and clear display
   display.begin(SSD1306_SWITCHCAPVCC, OLED_ADDR);
+  display.display();
+  delay(2000);
   display.clearDisplay();
   display.display();
-  display.setTextSize(1);
+  display.setTextSize(2);
   display.setTextColor(WHITE);
   
   // Open serial communications and wait for port to open:
-  Serial.begin(115200);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for native USB port only
-  }
+  mySerial.begin(9600);
 
-  Serial.println("Serial up and running.");
- 
 }
+
 
 void loop() {
 
- if (Serial.available()){
-  inChar=Serial.read();
-  Serial.print(inChar);
-  if (inChar!='\r'){
-    OLed_String+=inChar;
-    display.setCursor(0, 0);
-    display.print(OLed_String);
-  }
-  else{
-    display.clearDisplay();
-    OLed_String="";
-  }
-  display.display();
+ if (mySerial.available()){
+    inChar=mySerial.read();
+    mySerial.print(inChar);
+    if (inChar!='\r'){
+      OLed_String+=inChar;
+      display.setCursor(0, 0);
+      display.print(OLed_String);
+    }
+    else{
+      display.clearDisplay();
+      OLed_String="";
+    }
+    display.display();
   }
 
 }
