@@ -24,7 +24,7 @@ void setup() {
   delay(2000);
   display.clearDisplay();
   display.display();
-  display.setTextSize(3);
+  display.setTextSize(2);
   display.setTextColor(WHITE);
   
   // Open serial communications and wait for port to open:
@@ -35,14 +35,14 @@ void setup() {
 void loop() {
  if (mySerial.available()){
     inChar=mySerial.read();
-    mySerial.print(inChar);
-    if (inChar!='\r'){
-      display.print(inChar);
-    }
-    else{
+    if (inChar=='\r'){
       display.clearDisplay();
       display.setCursor(0, 0);
     }
+    else
+      display.print(inChar);
+  
+    mySerial.print(inChar);
     display.display();
   }
 }
