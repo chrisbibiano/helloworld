@@ -1,21 +1,22 @@
 #include <Arduino.h>
+#include <SPI.h>
 #include <Wire.h>
-#include <Adafruit_SSD1306.h>
 #include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <SoftwareSerial.h>
-
-SoftwareSerial mySerial(8,9); //RX,TX
-
-// OLED display TWI address
-#define OLED_ADDR   0x3C
-
-Adafruit_SSD1306 display(-1);
-
-char inChar;
 
 #if (SSD1306_LCDHEIGHT != 64)
     #error("Height incorrect, please fix Adafruit_SSD1306.h!");
 #endif
+
+// OLED display TWI address
+#define OLED_ADDR   0x3C
+#define OLED_RESET -1
+Adafruit_SSD1306 display(OLED_RESET);
+
+SoftwareSerial mySerial(8,9); //RX,TX
+
+char inChar;
 
 void setup() {
   // initialize and clear display
